@@ -62,10 +62,10 @@ def predict(text):
         
         probs[label] = log_prob
     
-    # Convertir de log a valor normalizado
-    exp_probs = {label: math.exp(log_prob) for label, log_prob in probs.items()}
+    #Convertir de log a valor normalizado
+    exp_probs = {k: math.exp(v) for k, v in probs.items()}
     total = sum(exp_probs.values())
-    normalized = {label: prob / total for label, prob in exp_probs.items()}
+    normalized = {k: v/total for k, v in exp_probs.items()}
     
     return normalized
 
