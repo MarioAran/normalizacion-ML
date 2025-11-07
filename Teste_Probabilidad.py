@@ -7,13 +7,11 @@ data = [
     ("I hated the movie", "-"),
     ("A great movie. Good movie.", "+"),
     ("Poor acting", "-"),
-    ("Great acting. A good movie.", "+"),
-    ("Good acting", "-"),
-    ("I love the acting", "+")
+    ("Great acting. A good movie.", "+")
 ]
 
 # Ajustes
-def tokenize(text):
+def set_word(text):
     return text.lower().replace(".", "").split()
 
 # Contadores
@@ -27,28 +25,27 @@ class_counts = {"+": 0, "-": 0}
 #Contar palabras por clase
 for text, label in data:
     class_counts[label] += 1
-    for word in tokenize(text):
+    for word in set_word(text):
         word_counts[label][word] += 1
 
 #Vocabulario total 
 vocab = set()
 for label in word_counts:
     vocab.update(word_counts[label].keys())
-V = len(vocab)
+word_values = len(vocab)
 
 #Totales por clase
 total_words = {
-    label: sum(word_counts[label].values())
-    for label in word_counts
+    label: sum(word_counts[label].values()) for label in word_counts #Recorre cada label (+ o -), suma las apariciones de todas sus palabras (en cada una) y guarda el total.
 }
 
 #Calculo de P(palabra | clase)
 def cond_prob(word, label):
-    return (word_counts[label][word] + 1) / (total_words[label] + V)
+    return (word_counts[label][word] + 1) / (total_words[label] + word_values)
 
 #Prediccion
 def predict(text):
-    tokens = tokenize(text)
+    tokens = set_word(text)
     probs = {}
     total_docs = sum(class_counts.values())
     
