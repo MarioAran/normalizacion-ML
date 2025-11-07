@@ -30,7 +30,7 @@ for text, label in data:
     for word in tokenize(text):
         word_counts[label][word] += 1
 
-#Vocabulario total
+#Vocabulario total 
 vocab = set()
 for label in word_counts:
     vocab.update(word_counts[label].keys())
