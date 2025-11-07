@@ -78,4 +78,8 @@ print("Probabilidades normalizadas:")
 for label, prob in result.items():
     print(f"{label}: {prob:.5f}")
 
+print("\nProbabilidades en porcentaje:")
+for label, prob in result.items():
+    print(f"{label}: {prob*100:.3f}%")
+    
 print("\nPrediccion:", max(result, key=result.get))
