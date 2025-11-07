@@ -42,7 +42,7 @@ total_words = {
     for label in word_counts
 }
 
-#Calculo de P(palabra | clase) con Laplace
+#Calculo de P(palabra | clase)
 def cond_prob(word, label):
     return (word_counts[label][word] + 1) / (total_words[label] + V)
 
@@ -54,22 +54,23 @@ def predict(text):
     
     for label in ["+", "-"]:
         #log(P(clase))
-        log_prob = math.log(class_counts[label] / total_docs)
+        #Calcula el logaritmo de la probabilidad de una clase
+        log_prob = math.log(class_counts[label] / total_docs) #El math.log() evita numeros muy bajos y convierte las multiplicaciones en sumas
         
         #log(producto P(palabra|clase)) = suma de log(P)
         for word in tokens:
-            log_prob += math.log(cond_prob(word, label))
+            log_prob += math.log(cond_prob(word, label)) #Suma de logaritmos con el calculo de P(palabra | clase) 
         
         probs[label] = log_prob
     
     #Convertir de log a valor normalizado
-    exp_probs = {k: math.exp(v) for k, v in probs.items()}
+    exp_probs = {label: math.exp(log_prob) for label, log_prob in probs.items()} #math.exp(log_prob) calcula la exponencia del valor
     total = sum(exp_probs.values())
-    normalized = {k: v/total for k, v in exp_probs.items()}
+    normalized = {label: log_prob/total for label, log_prob in exp_probs.items()} #Se divide cada probabilidad entre el total para que todas sumen 1
     
     return normalized
 
-#Prueba con el registro 6
+#Prueba con el registro 8
 sentence = "I hated the poor acting"
 result = predict(sentence)
 
